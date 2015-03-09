@@ -1,0 +1,105 @@
+header{
+  background-color: #333;
+}
+
+header a{
+  color: #fff;
+}
+
+footer {
+  /*text-align: right;*/
+    margin-top: 20px;
+  background-color: #333;
+  color: #fff;
+}
+footer a{
+  color: #fff;
+}
+footer a:hover{
+  text-decoration: none;
+  color: #428bca;
+}
+
+.ph{
+    min-height: 70vh;
+}
+
+/* all links */
+.bs-docs-sidebar .nav > li > a {
+    font-size: larger;
+    color: #999;
+    padding: 4px 20px;
+    /*add trasnparent border */
+    border-left: 2px solid transparent;
+}
+
+/* nested links */
+.bs-docs-sidebar > .nav > li > .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+}
+
+.bs-docs-sidebar > .nav > li > .nav > li > .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 40px;
+}
+
+/* active & hover links */
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus {
+    color: #563d7c;
+    text-decoration: none;
+    background-color: transparent;
+    border-left: 2px solid #563d7c;
+}
+
+/* all active links */
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > .active:hover > a,
+.bs-docs-sidebar .nav > .active:focus > a {
+    font-weight: 700;
+}
+
+/* nested active links */
+.bs-docs-sidebar .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav > .active:focus > a {
+    font-weight: 700;
+}
+
+/* hide all (inactive) nested list */
+.bs-docs-sidebar .nav  ul.nav {
+    display: none;
+}
+
+/* show active nested list */
+.bs-docs-sidebar .nav > .active > ul.nav {
+    display: block;
+}
+
+td .tooltip {
+    position:absolute
+}
+
+td div {
+    width: 40px;
+    height: 20px;
+}
+
+td > a{
+    width: 100%;
+    height: 100%;
+    text-decoration: none !important;
+}
+
+td a div{
+    background-color: lightgreen;
+    text-decoration: none;
+}
+
+.vg{
+    background-color: honeydew;
+}
