@@ -80,13 +80,17 @@ footer a:hover{
     display: block;
 }
 
-td .tooltip {
-    position:absolute
-}
+/*td .tooltip {*/
+    /*position:absolute*/
+/*}*/
 
 td div {
     width: 40px;
     height: 20px;
+}
+
+td.gr{
+    background-color: lightgreen;
 }
 
 td > a{
@@ -96,10 +100,14 @@ td > a{
 }
 
 td a div{
-    background-color: lightgreen;
     text-decoration: none;
 }
 
 .vg{
     background-color: honeydew;
+}
+
+ul{
+    list-style: none;
+    padding-left: 5px;
 }

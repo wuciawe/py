@@ -44,11 +44,11 @@ table input{
     max-width: 120px;
 }
 
-/*.pr{*/
-    /*padding-right: 5px;*/
-    /*text-align: right;*/
-/*}*/
-/*.pl{*/
-    /*padding-left: 5px;*/
-    /*text-align: left;*/
-/*}*/
+.pr{
+    padding-right: 5px;
+    text-align: right;
+}
+.pl{
+    padding-left: 5px;
+    text-align: left;
+}

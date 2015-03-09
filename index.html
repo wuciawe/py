@@ -16,7 +16,7 @@
     <!-- Update these with your own images-->
     <link rel="shortcut icon" href="http://wuciawe.github.io/favicon.ico">
     <script src="assets/js/jquery-1.11.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <!--<script src="assets/js/bootstrap.min.js"></script>-->
     <script src="assets/js/angular.min.js"></script>
     <script src="assets/js/angular-animate.min.js"></script>
     <script src="assets/js/ZeroClipboard.min.js"></script>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">拼音：</div>
-                        <input class="form-control" type="text" ng-model="ele.vl">
+                        <input class="form-control" type="text" ng-model="ele.vl" autofocus="autofocus">
                     </div>
                     <p>例字格式：字與拼音之間用<span class="label label-danger">空格</span>隔開，字與字之間用<span class="label label-danger">英文逗號</span>隔開。</p>
                     <div><strong>注意：</strong>例字嚴格按照格式輸入</div>
@@ -77,12 +77,25 @@
         <h3 class="popover-title">添加韻類別</h3>
         <div class="popover-content">
             <form name="popoverForm2" novalidate class="css-form">
-                <label>韻類別：</label><input type="text" ng-model="vcname" placeholder="開口韻" required />
+                <label>韻類別：</label><input type="text" ng-model="vcname" placeholder="開口韻" required autofocus="autofocus" />
             </form>
             <div class="form-actions pull-right">
                 <button type="button" class="btn btn-danger" ng-click="$hide()">Close</button>
                 <button type="button" class="btn btn-primary" ng-disabled="!popoverForm2.$valid" ng-click="popover.saved=true;$hide();mkCat(vcname)">OK</button>
             </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="pi3">
+    <div class="popover panel panel-success" tabindex="-1">
+        <div class="arrow"></div>
+        <div class="popover-title panel-heading"><strong>例字</strong></div>
+        <div class="popover-content panel-body">
+            <ul>
+                <li ng-repeat="e in ele.exs.split(',')">
+                    <label><strong>{{ e.split(' ')[0] }}：</strong></label>{{ e.split(' ')[1] }}
+                </li>
+            </ul>
         </div>
     </div>
 </script>
@@ -112,10 +125,10 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in tableData.consonants.body">
-                    <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'pr': ele.corder >= 0 && ele.corder % 2 != 0, 'pl': ele.corder >= 0 && ele.corder % 2 == 0, 'vg':col.vl == ''}">
+                    <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'gr': ele.corder > 0 && ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
                         <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="#" data-template="pi1" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-auto-close="1" bs-popover>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -124,6 +137,15 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <form role="form" class="col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="cinfo">關於聲母拼音說明：</label>
+                        <textarea class="form-control" rows="5" id="cinfo" ng-model="tableData.cinfo"></textarea>
+                    </div>
+                </form>
+            </div>
+
 
             <h3>韻母</h3>
             <table>
@@ -136,10 +158,10 @@
                 <tbody>
                 <tr ng-repeat-start="cat in tableData.vowels.cats">
                     <td class="rl" rowspan="{{ cat.cat.rspan + 1 }}" colspan="{{ cat.cat.cspan }}">{{ cat.cat.vl }}</td>
-                    <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder % 2 == 0, 'pr': ele.corder % 2 != 0, 'pl': ele.corder % 2 == 0, 'vg':col.vl == ''}">
+                    <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl gr':ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
                         <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="#" data-template="pi1" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-auto-close="1" bs-popover>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -148,10 +170,10 @@
                 </tr>
                 <!-- Now add Details row: -->
                 <tr ng-if="!$first" ng-repeat="row in cat.body">
-                    <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder % 2 == 0, 'pr': ele.corder % 2 != 0, 'pl': ele.corder % 2 == 0, 'vg':col.vl == ''}">
+                    <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl gr':ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
                         <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="#" data-template="pi1" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-auto-close="1" bs-popover>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -185,10 +207,116 @@
                 </tr>
                 </tbody>
             </table>
-            <button ng-if="form.$valid" class="btn btn-info" clip-click-fallback="fallback(copy)" clip-copy="tableData | json" clip-click="suc()">
-                Copy Into Clipboard
-            </button>
-            <pre ng-if="form.$valid">{{tableData | json}}</pre>
+            <div class="row">
+                <form role="form" class="col-md-8 col-md-offset-2">
+                    <div class="form-group">
+                        <label for="vinfo">關於韻母拼音說明：</label>
+                        <textarea class="form-control" rows="5" id="vinfo" ng-model="tableData.vinfo"></textarea>
+                    </div>
+                </form>
+            </div>
+
+
+            <div ng-if="form.$valid" class="btn-toolbar text-center" role="toolbar">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-info" clip-click-fallback="fallback(copy)" clip-copy="tableData | json" clip-click="suc()">
+                        Copy Into Clipboard
+                    </button>
+                </div>
+                <div class="btn-group" role="group" ng-model="button.radio" bs-radio-group>
+                    <label class="btn btn-default">
+                        <input name="pre" type="radio" class="btn btn-default" value="0">
+                        Preview
+                    </label>
+                    <label class="btn btn-default">
+                        <input name="json" type="radio" class="btn btn-default" value="1">
+                        Json view
+                    </label>
+                </div>
+            </div>
+
+            <div ng-if="form.$valid && button.radio == 0">
+                <form novalidate class="css-form">
+                    <h2>{{ tableData.name }} 音素表與拼音方案</h2>
+                </form>
+                <h3>聲母</h3>
+                <table>
+                    <thead>
+                    <tr ng-repeat="row in tableData.consonants.head">
+                        <th ng-if="$first" rowspan="{{ tableData.consonants.headsize.rows }}" colspan="{{ tableData.consonants.headsize.cols }}"></th>
+                        <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in tableData.consonants.body">
+                        <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'pr': ele.corder >= 0 && ele.corder % 2 != 0, 'pl': ele.corder >= 0 && ele.corder % 2 == 0, 'vg':ele.vl == '', 'gr':ele.exs != ''}">
+                            <a href="javascript://" ng-if="ele.exs != '' " data-template="pi3" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-trigger="hover" data-auto-close="1" bs-popover>
+                                <div>
+                                    {{ele.vl}}
+                                </div>
+                            </a>
+                            <div ng-if="ele.exs == '' ">
+                                {{ele.vl}}
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-if="tableData.cinfo.length != 0" class="row">
+                    <form role="form" class="col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="cinfod">關於聲母拼音說明：</label>
+                            <p id="cinfod">{{ tableData.cinfo }}</p>
+                        </div>
+                    </form>
+                </div>
+                <h3>韻母</h3>
+                <table>
+                    <thead>
+                    <tr ng-repeat="row in tableData.vowels.head">
+                        <th ng-if="$first" rowspan="{{ tableData.vowels.headsize.rows }}" colspan="{{ tableData.vowels.headsize.cols }}"></th>
+                        <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat-start="cat in tableData.vowels.cats">
+                        <td class="rl" rowspan="{{ cat.cat.rspan}}" colspan="{{ cat.cat.cspan }}">{{ cat.cat.vl }}</td>
+                        <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder % 2 == 0, 'pr': ele.corder % 2 != 0, 'pl': ele.corder % 2 == 0, 'vg':ele.vl == '', 'gr':ele.exs != ''}">
+                            <a href="javascript://" ng-if="ele.exs != '' " data-template="pi3" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-trigger="hover" data-auto-close="1" bs-popover>
+                                <div>
+                                    {{ele.vl}}
+                                </div>
+                            </a>
+                            <div ng-if="ele.exs == '' ">
+                                {{ele.vl}}
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Now add Details row: -->
+                    <tr ng-repeat-end ng-if="!$first" ng-repeat="row in cat.body">
+                        <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder % 2 == 0, 'pr': ele.corder % 2 != 0, 'pl': ele.corder % 2 == 0, 'vg':ele.vl == '', 'gr':ele.exs != ''}">
+                            <a href="javascript://" ng-if="ele.exs != '' " data-template="pi3" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-trigger="hover" data-auto-close="1" bs-popover>
+                                <div>
+                                    {{ele.vl}}
+                                </div>
+                            </a>
+                            <div ng-if="ele.exs == '' ">
+                                {{ele.vl}}
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-if="tableData.vinfo.length != 0" class="row">
+                    <form role="form" class="col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="vinfod">關於韻母拼音說明：</label>
+                            <p id="vinfod">{{ tableData.vinfo }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <pre ng-if="form.$valid && button.radio != 0">{{tableData | json}}</pre>
         </div>
     </div>
 </div>
