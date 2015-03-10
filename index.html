@@ -50,24 +50,42 @@
 </header>
 
 <script type="text/ng-template" id="pi1">
-    <div class="popover" tabindex="-1">
+    <div class="popover panel panel-default" tabindex="-1">
         <div class="arrow"></div>
-        <h3 class="popover-title">拼音與例字錄入</h3>
-        <div class="popover-content">
-            <form name="popoverForm">
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon">拼音：</div>
-                        <input class="form-control" type="text" ng-model="ele.vl" autofocus="autofocus">
+        <h3 class="popover-title panel-heading">拼音與例字錄入</h3>
+        <div class="popover-content panel-body">
+            <ul class="list-group">
+                <li class="list-group-item group-int">
+                    <div class="row">
+                        <div class="input-group col-xs-12 group-int">
+                            <span class="input-group-addon">音素拼音</span>
+                            <input class="form-control" type="text" placeholder="on" ng-model="ele.vl" />
+                        </div>
                     </div>
-                    <p>例字格式：字與拼音之間用<span class="label label-danger">空格</span>隔開，字與字之間用<span class="label label-danger">英文逗號</span>隔開。</p>
-                    <div><strong>注意：</strong>例字嚴格按照格式輸入</div>
-                    <div class="input-group">
-                        <div class="input-group-addon">例字：</div>
-                        <input class="form-control" type="text" placeholder="例如：我 wo,妳 ni,伊 yi" ng-model="ele.exs">
+                </li>
+                <li class="list-group-item group-int" ng-repeat="ex in ele.exs">
+                    <div class="row">
+                        <div class="col-xs-6 group-int">
+                            <div class="input-group">
+                                <span class="input-group-addon">例字</span>
+                                <input type="text" class="form-control" placeholder="儂" ng-model="ex.w" />
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                        <div class="col-xs-6 group-int">
+                            <div class="input-group">
+                                <span class="input-group-addon">拼音</span>
+                                <input type="text" class="form-control" placeholder="non" ng-model="ex.p" />
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
                     </div>
-                </div>
-            </form>
+                </li>
+                <li class="list-group-item group-int">
+                    <div class="row">
+                        <button class="btn btn-info col-xs-6" ng-click="mkExp(ele)">添加例字</button>
+                        <button class="btn btn-info col-xs-6" ng-click="rmExp(ele)">刪除例字</button>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </script>
@@ -77,7 +95,7 @@
         <h3 class="popover-title">添加韻類別</h3>
         <div class="popover-content">
             <form name="popoverForm2" novalidate class="css-form">
-                <label>韻類別：</label><input type="text" ng-model="vcname" placeholder="開口韻" required autofocus="autofocus" />
+                <label>韻尾類別：</label><input type="text" ng-model="vcname" placeholder="開尾韻" required autofocus="autofocus" />
             </form>
             <div class="form-actions pull-right">
                 <button type="button" class="btn btn-danger" ng-click="$hide()">Close</button>
@@ -92,8 +110,8 @@
         <div class="popover-title panel-heading"><strong>例字</strong></div>
         <div class="popover-content panel-body">
             <ul>
-                <li ng-repeat="e in ele.exs.split(',')">
-                    <label><strong>{{ e.split(' ')[0] }}：</strong></label>{{ e.split(' ')[1] }}
+                <li ng-repeat="e in ele.exs">
+                    <label><strong>{{ e.w }}：</strong></label>{{ e.p }}
                 </li>
             </ul>
         </div>
@@ -106,8 +124,10 @@
             <form name="form" novalidate class="css-form">
                 <h2>
                     <div class="input-group">
-
-                    <input type="text" ng-model="tableData.name" placeholder="上海" required /> 音素表與拼音方案
+                        <input class="" type="text" ng-model="tableData.jv.loc.lvl1" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="太湖"/> 片
+                        <input type="text" ng-model="tableData.jv.loc.lvl2" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="蘇滬嘉"/> 小片
+                        <input type="text" ng-model="tableData.jv.loc.lvl3" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="必填" placeholder="上海" required />(
+                        <input type="text" ng-model="tableData.jv.loc.opt" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="老派" />) 音素表與拼音方案
                         <div class="input-group-btn">
                             <button class="btn btn-info" ng-click="refreshTable()">Refresh Page</button>
                         </div>
@@ -118,13 +138,13 @@
 
             <table>
                 <thead>
-                <tr ng-repeat="row in tableData.consonants.head">
-                    <th ng-if="$first" rowspan="{{ tableData.consonants.headsize.rows }}" colspan="{{ tableData.consonants.headsize.cols }}"></th>
+                <tr ng-repeat="row in tableData.jv.consonants.head">
+                    <th ng-if="$first" rowspan="{{ tableData.jv.consonants.headsize.rows }}" colspan="{{ tableData.jv.consonants.headsize.cols }}"></th>
                     <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="row in tableData.consonants.body">
+                <tr ng-repeat="row in tableData.jv.consonants.body">
                     <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'gr': ele.corder > 0 && ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
                         <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
@@ -141,7 +161,7 @@
                 <form role="form" class="col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <label for="cinfo">關於聲母拼音說明：</label>
-                        <textarea class="form-control" rows="5" id="cinfo" ng-model="tableData.cinfo"></textarea>
+                        <textarea class="form-control" rows="5" id="cinfo" ng-model="tableData.jv.cinfo"></textarea>
                     </div>
                 </form>
             </div>
@@ -150,13 +170,13 @@
             <h3>韻母</h3>
             <table>
                 <thead>
-                <tr ng-repeat="row in tableData.vowels.head">
-                    <th ng-if="$first" rowspan="{{ tableData.vowels.headsize.rows }}" colspan="{{ tableData.vowels.headsize.cols }}"></th>
+                <tr ng-repeat="row in tableData.jv.vowels.head">
+                    <th ng-if="$first" rowspan="{{ tableData.jv.vowels.headsize.rows }}" colspan="{{ tableData.jv.vowels.headsize.cols }}"></th>
                     <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat-start="cat in tableData.vowels.cats">
+                <tr ng-repeat-start="cat in tableData.jv.vowels.cats">
                     <td class="rl" rowspan="{{ cat.cat.rspan + 1 }}" colspan="{{ cat.cat.cspan }}">{{ cat.cat.vl }}</td>
                     <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl gr':ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
@@ -211,7 +231,7 @@
                 <form role="form" class="col-md-8 col-md-offset-2">
                     <div class="form-group">
                         <label for="vinfo">關於韻母拼音說明：</label>
-                        <textarea class="form-control" rows="5" id="vinfo" ng-model="tableData.vinfo"></textarea>
+                        <textarea class="form-control" rows="5" id="vinfo" ng-model="tableData.jv.vinfo"></textarea>
                     </div>
                 </form>
             </div>
@@ -219,7 +239,7 @@
 
             <div ng-if="form.$valid" class="btn-toolbar text-center" role="toolbar">
                 <div class="btn-group" role="group">
-                    <button class="btn btn-info" clip-click-fallback="fallback(copy)" clip-copy="tableData | json" clip-click="suc()">
+                    <button class="btn btn-info" clip-click-fallback="fallback(copy)" clip-copy="tableData.jv | json" clip-click="suc()">
                         Copy Into Clipboard
                     </button>
                 </div>
@@ -237,18 +257,18 @@
 
             <div ng-if="form.$valid && button.radio == 0">
                 <form novalidate class="css-form">
-                    <h2>{{ tableData.name }} 音素表與拼音方案</h2>
+                    <h2>{{ (tableData.jv.loc.lvl1.length > 0 ? tableData.jv.loc.lvl1 + "片 - " : "") + (tableData.jv.loc.lvl2.length > 0 ? tableData.jv.loc.lvl2 + "小片 - " : "") + tableData.jv.loc.lvl3 + (tableData.jv.loc.opt.length > 0 ? '(' + tableData.jv.loc.opt + ')' : "" )}} 音素表與拼音方案</h2>
                 </form>
                 <h3>聲母</h3>
                 <table>
                     <thead>
-                    <tr ng-repeat="row in tableData.consonants.head">
-                        <th ng-if="$first" rowspan="{{ tableData.consonants.headsize.rows }}" colspan="{{ tableData.consonants.headsize.cols }}"></th>
+                    <tr ng-repeat="row in tableData.jv.consonants.head">
+                        <th ng-if="$first" rowspan="{{ tableData.jv.consonants.headsize.rows }}" colspan="{{ tableData.jv.consonants.headsize.cols }}"></th>
                         <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="row in tableData.consonants.body">
+                    <tr ng-repeat="row in tableData.jv.consonants.body">
                         <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'pr': ele.corder >= 0 && ele.corder % 2 != 0, 'pl': ele.corder >= 0 && ele.corder % 2 == 0, 'vg':ele.vl == '', 'gr':ele.exs != ''}">
                             <a href="javascript://" ng-if="ele.exs != '' " data-template="pi3" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-trigger="hover" data-auto-close="1" bs-popover>
                                 <div>
@@ -262,24 +282,24 @@
                     </tr>
                     </tbody>
                 </table>
-                <div ng-if="tableData.cinfo.length != 0" class="row">
+                <div ng-if="tableData.jv.cinfo.length != 0" class="row">
                     <form role="form" class="col-md-8 col-md-offset-2">
                         <div class="form-group">
                             <label for="cinfod">關於聲母拼音說明：</label>
-                            <p id="cinfod">{{ tableData.cinfo }}</p>
+                            <p id="cinfod">{{ tableData.jv.cinfo }}</p>
                         </div>
                     </form>
                 </div>
                 <h3>韻母</h3>
                 <table>
                     <thead>
-                    <tr ng-repeat="row in tableData.vowels.head">
-                        <th ng-if="$first" rowspan="{{ tableData.vowels.headsize.rows }}" colspan="{{ tableData.vowels.headsize.cols }}"></th>
+                    <tr ng-repeat="row in tableData.jv.vowels.head">
+                        <th ng-if="$first" rowspan="{{ tableData.jv.vowels.headsize.rows }}" colspan="{{ tableData.jv.vowels.headsize.cols }}"></th>
                         <th ng-repeat="ele in row.cells" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}">{{ ele.vl }}</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat-start="cat in tableData.vowels.cats">
+                    <tr ng-repeat-start="cat in tableData.jv.vowels.cats">
                         <td class="rl" rowspan="{{ cat.cat.rspan}}" colspan="{{ cat.cat.cspan }}">{{ cat.cat.vl }}</td>
                         <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder % 2 == 0, 'pr': ele.corder % 2 != 0, 'pl': ele.corder % 2 == 0, 'vg':ele.vl == '', 'gr':ele.exs != ''}">
                             <a href="javascript://" ng-if="ele.exs != '' " data-template="pi3" data-placement="top" data-container = 'body' data-animation="am-flip-x" data-trigger="hover" data-auto-close="1" bs-popover>
@@ -307,16 +327,16 @@
                     </tr>
                     </tbody>
                 </table>
-                <div ng-if="tableData.vinfo.length != 0" class="row">
+                <div ng-if="tableData.jv.vinfo.length != 0" class="row">
                     <form role="form" class="col-md-8 col-md-offset-2">
                         <div class="form-group">
                             <label for="vinfod">關於韻母拼音說明：</label>
-                            <p id="vinfod">{{ tableData.vinfo }}</p>
+                            <p id="vinfod">{{ tableData.jv.vinfo }}</p>
                         </div>
                     </form>
                 </div>
             </div>
-            <pre ng-if="form.$valid && button.radio != 0">{{tableData | json}}</pre>
+            <pre ng-if="form.$valid && button.radio != 0">{{tableData.jv | json}}</pre>
         </div>
     </div>
 </div>

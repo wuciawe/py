@@ -52,3 +52,7 @@ table input{
     padding-left: 5px;
     text-align: left;
 }
+
+.group-int{
+    padding: 0;
+}
