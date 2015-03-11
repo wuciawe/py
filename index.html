@@ -135,8 +135,8 @@
                 </h2>
             </form>
             <h3>聲母</h3>
-
-            <table>
+            <form>
+                <table>
                 <thead>
                 <tr ng-repeat="row in tableData.jv.consonants.head">
                     <th ng-if="$first" rowspan="{{ tableData.jv.consonants.headsize.rows }}" colspan="{{ tableData.jv.consonants.headsize.cols }}"></th>
@@ -157,6 +157,8 @@
                 </tr>
                 </tbody>
             </table>
+            </form>
+            
             <div class="row">
                 <form role="form" class="col-md-8 col-md-offset-2">
                     <div class="form-group">
@@ -168,7 +170,8 @@
 
 
             <h3>韻母</h3>
-            <table>
+            <form>
+                <table>
                 <thead>
                 <tr ng-repeat="row in tableData.jv.vowels.head">
                     <th ng-if="$first" rowspan="{{ tableData.jv.vowels.headsize.rows }}" colspan="{{ tableData.jv.vowels.headsize.cols }}"></th>
@@ -227,6 +230,8 @@
                 </tr>
                 </tbody>
             </table>
+            </form>
+            
             <div class="row">
                 <form role="form" class="col-md-8 col-md-offset-2">
                     <div class="form-group">
