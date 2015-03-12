@@ -54,21 +54,22 @@ class RmzController
     $scope.$watch 'files', ->
       $scope.upload $scope.files
     $scope.savedata = ->
-      textToWrite = JSON.stringify $scope.tableData.jv
-      textFileAsBlob = new Blob [textToWrite],
-        type:'text/plain'
-      fileNameToSaveAs = "#{$scope.tableData.jv.loc.lvl3}.json"
-      downloadLink = document.createElement("a");
-      downloadLink.download = fileNameToSaveAs;
-      downloadLink.innerHTML = "Download File";
-      if window.webkitURL != null
-        downloadLink.href = window.webkitURL.createObjectURL textFileAsBlob
-      else
-        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-        downloadLink.onclick = destroyClickedElement
-        downloadLink.style.display = "none"
-        document.body.appendChild downloadLink
-      downloadLink.click()
+      if $scope.tableData.jv.lvl3.length > 0
+        textToWrite = JSON.stringify $scope.tableData.jv
+        textFileAsBlob = new Blob [textToWrite],
+          type:'text/plain'
+        fileNameToSaveAs = "#{$scope.tableData.jv.loc.lvl3}.json"
+        downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        if window.webkitURL != null
+          downloadLink.href = window.webkitURL.createObjectURL textFileAsBlob
+        else
+          downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+          downloadLink.onclick = destroyClickedElement
+          downloadLink.style.display = "none"
+          document.body.appendChild downloadLink
+        downloadLink.click()
     $scope.upload = (files) ->
       if files
         if files.length == 1
