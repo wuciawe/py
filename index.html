@@ -23,7 +23,9 @@
     <script src="assets/js/ngclip.min.js"></script>
     <script src="assets/js/angular-strap.min.js"></script>
     <script src="assets/js/angular-strap.tpl.min.js"></script>
+    <script src="assets/js/angular-file-upload-all.min.js"></script>
     <script src="assets/js/ng-script.min.js"></script>
+
     <title>拼音錄入</title>
 </head>
 <body data-ng-app="myApp">
@@ -59,7 +61,7 @@
                     <div class="row">
                         <div class="input-group col-xs-12 group-int">
                             <span class="input-group-addon">音素拼音</span>
-                            <input class="form-control" type="text" placeholder="on" ng-model="ele.vl" />
+                            <input class="form-control" type="text" placeholder="on" ng-model="ele.vl"/>
                         </div>
                     </div>
                 </li>
@@ -122,17 +124,20 @@
     <div class="row">
         <div class="col-md-12">
             <form name="form" novalidate class="css-form">
-                <h2>
+                <h3>
                     <div class="input-group">
                         <input class="" type="text" ng-model="tableData.jv.loc.lvl1" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="太湖"/> 片
                         <input type="text" ng-model="tableData.jv.loc.lvl2" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="蘇滬嘉"/> 小片
                         <input type="text" ng-model="tableData.jv.loc.lvl3" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="必填" placeholder="上海" required />(
                         <input type="text" ng-model="tableData.jv.loc.opt" data-placement="left" data-type="info" data-container="body" data-trigger="focus" bs-tooltip data-title="選填" placeholder="老派" />) 音素表與拼音方案
                         <div class="input-group-btn">
-                            <button class="btn btn-info" ng-click="refreshTable()">Refresh Page</button>
+                            <button class="btn btn-info btn-sm" ng-click="refreshTable()">Emptify</button>
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-info btn-sm" ng-file-select ng-model="files" accept=".json">Upload Local Json Data</button>
                         </div>
                 </div>
-                </h2>
+                </h3>
             </form>
             <h3>聲母</h3>
             <form>
@@ -147,8 +152,8 @@
                 <tr ng-repeat="row in tableData.jv.consonants.body">
                     <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl':ele.corder < 0 || ele.corder % 2 == 0, 'gr': ele.corder > 0 && ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
-                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
+                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl" tabindex="{{ ele.corder * 1000 + row.rorder }}"/>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover tabindex="{{ ele.corder * 1000 + row.rorder }}">
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -183,8 +188,8 @@
                     <td class="rl" rowspan="{{ cat.cat.rspan + 1 }}" colspan="{{ cat.cat.cspan }}">{{ cat.cat.vl }}</td>
                     <td ng-repeat="ele in cat.body[0].elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl gr':ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
-                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
+                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl" tabindex="{{ ele.corder * 1000 + row.rorder }}"/>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover tabindex="{{ ele.corder * 1000 + row.rorder }}">
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -195,8 +200,8 @@
                 <tr ng-if="!$first" ng-repeat="row in cat.body">
                     <td ng-repeat="ele in row.elements" rowspan="{{ ele.rspan }}" colspan="{{ ele.cspan }}" ng-class="{'rl gr':ele.corder % 2 == 0}">
                         <span ng-if="ele.corder < 0">{{ ele.vl }}</span>
-                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl"/>
-                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover>
+                        <input ng-if="ele.corder > 0 && ele.corder % 2 != 0" type="text" ng-model="ele.vl" tabindex="{{ ele.corder * 1000 + row.rorder }}"/>
+                        <a ng-if="ele.corder > 0 && ele.corder % 2 == 0" href="javascript://" data-template="pi1" data-placement="top" data-container = 'body' data-auto-close="1" bs-popover tabindex="{{ ele.corder * 1000 + row.rorder }}">
                             <div>
                                 {{ele.vl}}
                             </div>
@@ -243,6 +248,9 @@
 
 
             <div ng-if="form.$valid" class="btn-toolbar text-center" role="toolbar">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-info" ng-click="savedata()">Save to Local File</button>
+                </div>
                 <div class="btn-group" role="group">
                     <button class="btn btn-info" clip-click-fallback="fallback(copy)" clip-copy="tableData.jv | json" clip-click="suc()">
                         Copy Into Clipboard

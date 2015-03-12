@@ -1,5 +1,5 @@
 class RmzController
-  constructor: ($scope, @dataService) ->
+  constructor: ($scope, $upload, @dataService) ->
     baseRow=[{corder:1,vl:"",rspan:1,cspan:1,exs:""},{corder:2,vl:"",rspan:1,cspan:1,exs:""},{corder:3,vl:"",rspan:1,cspan:1,exs:""},{corder:4,vl:"",rspan:1,cspan:1,exs:""},{corder:5,vl:"",rspan:1,cspan:1,exs:""},{corder:6,vl:"",rspan:1,cspan:1,exs:""},{corder:7,vl:"",rspan:1,cspan:1,exs:""},{corder:8,vl:"",rspan:1,cspan:1,exs:""}]
     dataService.updateData('data')
     $scope.tableData = dataService.tableData
@@ -50,10 +50,41 @@ class RmzController
         p: ""
       ele.exs.push obj
     $scope.rmExp = (ele) ->
-      console.log(ele.exs.length)
       ele.exs.pop() if ele.exs.length > 0
+    $scope.$watch 'files', ->
+      $scope.upload $scope.files
+    $scope.savedata = ->
+      textToWrite = JSON.stringify $scope.tableData.jv
+      textFileAsBlob = new Blob [textToWrite],
+        type:'text/plain'
+      fileNameToSaveAs = "#{$scope.tableData.jv.loc.lvl3}.json"
+      downloadLink = document.createElement("a");
+      downloadLink.download = fileNameToSaveAs;
+      downloadLink.innerHTML = "Download File";
+      if window.webkitURL != null
+        downloadLink.href = window.webkitURL.createObjectURL textFileAsBlob
+      else
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement
+        downloadLink.style.display = "none"
+        document.body.appendChild downloadLink
+      downloadLink.click()
+    $scope.upload = (files) ->
+      if files
+        if files.length == 1
+          filereader = new FileReader()
+          filereader.onload = (e) ->
+            $scope.tableData.jv = JSON.parse e.target.result
+          filereader.readAsText(files[0], "UTF-8")
+#          console.log files[0]
+#          $upload.upload
+#            url: 'upload/url'
+#            file: files[0]
+#          .success (data, status, headers, config) ->
+#            console.log data
+
 angular
-.module "myApp", ['ngAnimate',"mgcrea.ngStrap","ngClipboard"]
+.module "myApp", ['ngAnimate',"mgcrea.ngStrap","ngClipboard", "angularFileUpload"]
 .config ["ngClipProvider",(ngClipProvider) ->
     ngClipProvider.setPath("assets/js/ZeroClipboard.swf")
 ]
@@ -78,4 +109,4 @@ angular
       .error ->
         alert 'error'
 ]
-.controller "rmzController", ['$scope', 'dataService', RmzController]
+.controller "rmzController", ['$scope', '$upload', 'dataService', RmzController]
